@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Bare - Start Bootstrap Template</title>
+        <title>Biblioteka Filmów</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -40,7 +40,7 @@
                                     <h4 class="card-title">{{ movie.title }}</h4>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-primary">Pokaż więcej</a>
+                                    <a href="{{ url_for('movie_details', movie_id=movie.id) }}">Pokaż więcej</a>
                                 </div>
                             </div>
                         </div>

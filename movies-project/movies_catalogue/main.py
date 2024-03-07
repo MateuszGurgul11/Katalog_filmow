@@ -11,9 +11,12 @@ def utility_processor():
 
 @app.route("/")
 def homepage():
-    # Pobieranie listy filmów i przekazanie ich do szablonu
-    movies = tmdb_client.get_popular_movies()["results"][:8]
+    movies = tmdb_client.get_random_movies(how_many=8)
     return render_template("index.html", movies=movies)
+
+@app.route("/movie/<movie_id>")
+def movie_details(movie_id):
+    return render_template("movie_details.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,6 +1,7 @@
 import requests
 from flask import Flask
 import tmdb_client
+import random
 
 app = Flask(__name__)
 
@@ -22,3 +23,14 @@ def get_popular_movies():
 def get_poster_url(poster_api_path, size = "w342"):
     base_url = "https://image.tmdb.org/t/p/"
     return f"{base_url}{size}/{poster_api_path}"
+
+def get_movies(how_many):
+    data = get_popular_movies()
+    return data['results'][:how_many]
+
+def get_random_movies(how_many):
+    data = get_popular_movies()
+    movies = data["results"]
+    return random.sample(movies, how_many)
+
+print(get_random_movies(5))
