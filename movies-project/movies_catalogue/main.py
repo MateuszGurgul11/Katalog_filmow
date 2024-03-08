@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import random
 import tmdb_client
 
 app = Flask(__name__)
@@ -21,11 +22,13 @@ def homepage():
     movies = tmdb_client.get_random_movies(how_many=8)
     return render_template("index.html", movies=movies)
 
-@app.route('/movie/<movie_id>')
+@app.route("/movie/<movie_id>")
 def movie_details(movie_id):
     details = tmdb_client.get_single_movie(movie_id)
     cast = tmdb_client.get_single_movie_cast(movie_id)
-    return render_template("movie_details.html", movie=details, cast=cast)
+    movie_images = tmdb_client.get_movie_images(movie_id)
+    selected_backdrop = random.choice(movie_images['backdrops'])
+    return render_template("movie_details.html", movie=details, cast=cast, selected_backdrop=selected_backdrop)
 
 if __name__ == "__main__":
     app.run(debug=True)

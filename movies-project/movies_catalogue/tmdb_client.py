@@ -44,9 +44,12 @@ def get_backdrop_url(backdrop_api_path, size="w780"):
     base_url = "https://image.tmdb.org/t/p/"
     return f"{base_url}{size}/{backdrop_api_path}"
 
-def get_profile_url(profile_api_path, size="w180"):
-    base_url ="https://image.tmdb.org/t/p/"
-    return f"{base_url}{size}/{profile_api_path}"
+def get_profile_url(profile_api_path, size="w185"):
+    if profile_api_path:
+        base_url ="https://image.tmdb.org/t/p/"
+        return f"{base_url}{size}/{profile_api_path}"
+    else:
+        return None
 
 def get_movies(how_many):
     data = get_popular_movies()
@@ -56,3 +59,11 @@ def get_random_movies(how_many):
     data = get_popular_movies()
     movies = data["results"]
     return random.sample(movies, how_many)
+
+def get_movie_images(movie_id):
+    endpoint = f"https://api.themoviedb.org/3/movie/{movie_id}/images"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+    response = requests.get(endpoint, headers=headers)
+    return response.json()
