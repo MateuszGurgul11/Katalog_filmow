@@ -12,12 +12,34 @@ def utility_processor():
         return tmdb_client.get_poster_url(path, size)
     return {"tmdb_image_url": tmdb_image_url}
 
-def get_popular_movies():
-    endpoint = "https://api.themoviedb.org/3/movie/popular"
+def get_popular_movies(list_type=None):
+    endpoint = f"https://api.themoviedb.org/3/movie/{list_type}"
     headers = {
         "Authorization": f"Bearer {API_TOKEN}"
     }
     response = requests.get(endpoint, headers=headers)
+    return response.json()
+
+def get_movies(how_many, list_type):
+    data = get_popular_movies(list_type)
+    if 'results' in data:
+        return data['results'][:how_many]
+    else:
+        print("Nie istnieje taka lista filmow!")
+        return []
+
+def get_random_movies(how_many, list_type):
+    data = get_popular_movies(list_type)
+    movies = data["results"]
+    return random.sample(movies, how_many)
+
+def get_movies_list(list_type):
+    endpoint = f"https://api.themoviedb.org/3/movie/{list_type}"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+    response = requests.get(endpoint, headers=headers)
+    response.raise_for_status()
     return response.json()
 
 def get_single_movie(movie_id):
@@ -28,13 +50,21 @@ def get_single_movie(movie_id):
     response = requests.get(endpoint, headers=headers)
     return response.json()
 
-def get_single_movie_cast(movie_id):
+def get_single_movie_cast(movie_id, how_many):
     endpoint = f"https://api.themoviedb.org/3/movie/{movie_id}/credits"
     headers = {
         "Authorization": f"Bearer {API_TOKEN}"
     }
     response = requests.get(endpoint, headers=headers)
-    return response.json()["cast"]
+    return response.json()["cast"][:how_many]
+
+def get_movie_images(movie_id):
+    endpoint = f"https://api.themoviedb.org/3/movie/{movie_id}/images"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+    response = requests.get(endpoint, headers=headers)
+    return response.json()
 
 def get_poster_url(poster_api_path, size = "w342"):
     base_url = "https://image.tmdb.org/t/p/"
@@ -50,20 +80,6 @@ def get_profile_url(profile_api_path, size="w185"):
         return f"{base_url}{size}/{profile_api_path}"
     else:
         return None
-
-def get_movies(how_many):
-    data = get_popular_movies()
-    return data['results'][:how_many]
-
-def get_random_movies(how_many):
-    data = get_popular_movies()
-    movies = data["results"]
-    return random.sample(movies, how_many)
-
-def get_movie_images(movie_id):
-    endpoint = f"https://api.themoviedb.org/3/movie/{movie_id}/images"
-    headers = {
-        "Authorization": f"Bearer {API_TOKEN}"
-    }
-    response = requests.get(endpoint, headers=headers)
-    return response.json()
+    
+def get_movie_list():
+    return ['popular', 'upcoming', 'top_rated', 'now_playing']
