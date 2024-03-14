@@ -83,3 +83,14 @@ def get_profile_url(profile_api_path, size="w185"):
     
 def get_movie_list():
     return ['popular', 'upcoming', 'top_rated', 'now_playing']
+
+def search(search_query):
+    base_url = "https://api.themoviedb.org/3/"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+    endpoint = f"{base_url}/search/movie?query={search_query}"
+
+    response = requests.get(endpoint, headers=headers)
+    response = response.json()
+    return response['results']
